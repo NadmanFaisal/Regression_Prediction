@@ -27,16 +27,21 @@ class linear_regression:
         return w
 
     def train(self, X, y, w, alpha, iterations):
-        pred_y = self.get_pred_y(X, w)
-        cost = self.get_cost_function(pred_y, y, X)
-        print("Cost:", cost)
-        print("W:", w)
-
-        a = alpha
         for i in range(iterations):
+            w = self.get_gradient_descent(alpha, X, w, y)
             pred_y = self.get_pred_y(X, w)
-            w = self.get_gradient_descent(a, X, w, y)
             cost = self.get_cost_function(pred_y, y, X)
             print("Cost:", cost)
             print("W:", w)
+        
+        return w
 
+    def make_prediction(self, X, w):
+        prediction = X @ w
+        return prediction
+
+    def get_accuracy(self, prediction, actual):
+        ss_res = np.sum((actual - prediction) ** 2)
+        ss_tot = np.sum((actual - np.mean(actual)) ** 2)
+        r2 = 1 - (ss_res / ss_tot)
+        return r2
