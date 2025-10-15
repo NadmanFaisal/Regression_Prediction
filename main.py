@@ -70,3 +70,11 @@ plt.legend()
 plt.tight_layout()
 plt.savefig("plots/final.png")
 plt.close()
+
+# Time to make some predictions on unseen data
+feature_value = 14
+
+feature_scaled = (feature_value - x_min) / (x_max - x_min)
+X_new = np.array([[1, feature_scaled]])
+y_pred = model.make_prediction(X_new, w)
+print(f"Prediction for feature={feature_value}: {y_pred[0]:.4f}")
