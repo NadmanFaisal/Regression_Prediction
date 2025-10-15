@@ -10,7 +10,7 @@ os.makedirs("plots", exist_ok=True)
 
 # Load data
 extractor = extract_data()
-np_array = extractor.convert_to_array('Data/Grades.csv').astype(np.float64)
+np_array = extractor.convert_to_array('Data/NoisyLinearData.csv').astype(np.float64)
 
 # First column = feature (X), second column = target (y)
 X = np_array[:, 0].reshape(-1, 1)
@@ -47,10 +47,10 @@ y_test = y[split_index:]
 model = linear_regression()
 w_init = np.zeros(X_train.shape[1])
 
-m = X_train.shape[0]
-L = (np.linalg.norm(X_train, 2) ** 2) / m
-alpha = 1.0 / (2 * L)
-w = model.train(X_train, y_train, np.zeros(X_train.shape[1]), alpha=alpha, iterations=500)
+#m = X_train.shape[0]
+#L = (np.linalg.norm(X_train, 2) ** 2) / m
+#alpha = 1.0 / (2 * L)
+w = model.train(X_train, y_train, np.zeros(X_train.shape[1]), alpha=0.01, iterations=10000)
 
 # Predict & Evaluate
 prediction = model.make_prediction(X_test, w)

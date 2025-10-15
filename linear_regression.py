@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import csv
 
 class linear_regression:
@@ -26,13 +27,27 @@ class linear_regression:
         w = w - ((alpha/m) * (X.T @ error))
         return w
 
+
     def train(self, X, y, w, alpha, iterations):
+        costs = []
+        
         for i in range(iterations):
             w = self.get_gradient_descent(alpha, X, w, y)
             pred_y = self.get_pred_y(X, w)
             cost = self.get_cost_function(pred_y, y, X)
-            print("Cost:", cost)
-            print("W:", w)
+            costs.append(cost)
+            print(f"Iteration {i+1}/{iterations} - Cost: {cost}")
+                
+        print("Final Weights:", w)
+        
+        # Plot the cost function
+        plt.figure(figsize=(8, 5))
+        plt.plot(range(1, iterations + 1), costs, marker='o')
+        plt.title("Cost Function vs Iterations")
+        plt.xlabel("Iterations")
+        plt.ylabel("Cost")
+        plt.grid(True)
+        plt.savefig("plots/cost_function.png")
         
         return w
 
