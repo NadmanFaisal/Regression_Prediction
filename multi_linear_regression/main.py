@@ -44,5 +44,13 @@ print(data)
 #plt.savefig("Plots/median_income_vs_median_house_value")
 #plt.close()
 
+np_data = data.to_numpy()
+X = np_data[:, :4]
+y = np_data[:, -1]
+m, n = X.shape
+
+X = np.hstack([np.ones((m, 1)), X])
+w = np.zeros([n + 1])
+
 model = ml_regression()
-model.hello_world()
+model.train(X, y, w)
