@@ -6,8 +6,6 @@ from ml_regression import ml_regression
 
 data = pd.read_csv("Data/California_Housing_Data.csv").drop(["total_rooms", "total_bedrooms", "population", "ocean_proximity", "households"], axis=1)
 
-print(data)
-
 ## Plot the longitude vs meadian_house_value
 #plt.figure()
 #plt.scatter(data["longitude"], data["median_house_value"])
@@ -45,12 +43,45 @@ print(data)
 #plt.close()
 
 np_data = data.to_numpy()
-X = np_data[:, :4]
-y = np_data[:, -1]
-m, n = X.shape
+np.random.seed(42)
+np.random.shuffle(np_data)
 
-X = np.hstack([np.ones((m, 1)), X])
-w = np.zeros([n + 1])
+X_raw = np_data[:, :4].astype(np.float64)
+y = np_data[:, -1].astype(np.float64)
+m, n = X_raw.shape
+
+# Split data 80/20
+split = int(0.8 * m)
+X_train_raw, X_test_raw = X_raw[:split], X_raw[split:]
+y_train, y_test = y[:split], y[split:]
+
+# Scale features
+x_mean = X_train_raw.mean(axis=0)
+x_min  = X_train_raw.min(axis=0)
+x_max  = X_train_raw.max(axis=0)
+den = (x_max - x_min)
+
+X_train = (X_train_raw - x_mean) / den
+X_test  = (X_test_raw  - x_mean) / den
+
+# Add bias
+X_train = np.hstack([np.ones((X_train.shape[0], 1)), X_train])
+X_test  = np.hstack([np.ones((X_test.shape[0], 1)),  X_test])
+
+# Ensure data
+print("X Train:", X_train)
+
+# Train the model
+w = np.zeros(X_train.shape[1])
+alpha = 0.03
+iterations = 6000
 
 model = ml_regression()
-model.train(X, y, w)
+w = model.train(X_train, y_train, w, alpha, iterations)
+
+# Check accuracy
+prediction = model.get_prediction(X_test, w)
+r2 = model.get_accuracy(prediction, y_test)
+
+print("R2:", r2)
+
