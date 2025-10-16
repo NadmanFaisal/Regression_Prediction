@@ -85,3 +85,12 @@ r2 = model.get_accuracy(prediction, y_test)
 
 print("R2:", r2)
 
+plt.figure(figsize=(6,6))
+plt.scatter(y_test, X_test @ w, color='green', alpha=0.5)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+plt.xlabel("Actual Median House Value")
+plt.ylabel("Predicted Median House Value")
+plt.title("Actual vs Predicted")
+plt.tight_layout()
+plt.savefig("Plots/actual_vs_predicted.png")
+plt.close()
